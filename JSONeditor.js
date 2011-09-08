@@ -25,12 +25,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 
 JSONeditor={
-	start:function(treeDivName,formDivName,json,showExamples){
+	start:function(treeDivName,formDivName,json,showExamples,imgPath){
 		if(this.examples.length<6){
 			var e=this.treeBuilder.JSONstring.make(this)
 			eval("this.examples[5]={JSONeditor:"+e+"}")
 		}
 		this.treeDivName=treeDivName
+		if(imgPath) this.treeBuilder.images.path = imgPath;
 		var t=this.treeBuilder, $=t.$
 		treeBuilder=t
 		var s=$(treeDivName).style
