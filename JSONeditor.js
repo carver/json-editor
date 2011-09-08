@@ -25,7 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 
 JSONeditor={
-	start:function(treeDivName,formDivName,json,showExamples,imgPath){
+	start:function(treeDivName,formDivName,json,showExamples,imgPath,onchange){
 		if(this.examples.length<6){
 			var e=this.treeBuilder.JSONstring.make(this);
 			eval("this.examples[5]={JSONeditor:"+e+"}");
@@ -34,6 +34,7 @@ JSONeditor={
 		if(imgPath) this.treeBuilder.images.path = imgPath;
 		var t=this.treeBuilder, $=t.$;
 		treeBuilder=t;
+		treeBuilder.onchange = onchange;
 		var s=$(treeDivName).style;
 		var f=$(formDivName);
 		var fs=f.style;
@@ -343,6 +344,15 @@ JSONeditor.treeBuilder={
 		v=x=='undefined'?'undefined':v
 		f.jvalue.value=v		
 	},
+	triggerChange:function(){	
+		if(this.onchange) {
+			try {
+				this.onchange(this.json);
+			} catch(e) {
+				alert("onchange method failed "+e+" "+e.description);
+			}
+		}
+	},
 	jsonChange:function(f,remove,rename){
 		try {
 			var l=f.jlabel.value
@@ -360,8 +370,9 @@ JSONeditor.treeBuilder={
 				eval("v="+v)
 				this.JSONbuild(this.baseDiv,v)
 				for(var i in this.stateMem){this.openAndClose(i,true)}
-				this.setJsonMessage('Saved!')
-				return false
+				this.setJsonMessage('Saved!');
+				this.triggerChange();
+				return false;
 			}
 			eval("var json="+this.JSONstring.make(this.json))
 			var randi=Math.random()
@@ -399,6 +410,7 @@ JSONeditor.treeBuilder={
 			if(remove){l=""}
 			this.setJsonMessage(remove?'Deleted!':rename?'Renamed!':'Saved!')
 			if(!remove){this.jsonResponder(l)}
+			this.triggerChange();
   		}
 		catch(err){
 			alert(err+"\n\n"+"Save error!")
