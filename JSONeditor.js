@@ -692,8 +692,8 @@ JSONeditor.treeBuilder.JSONstring={
 				this.restoreCode.push('this.myObj.'+this.path.join(".")+"="+arg.split("JSONcircRef:").join("this.myObj."));
 			};
 			out.push('"');
-			var a=['\n','\\n','\r','\\r','"','\\"'];
-			arg+=""; for(var i=0;i<6;i+=2){arg=arg.split(a[i]).join(a[i+1])};
+			var a=['\n','\\n','\r','\\r','"','\\"','\.','\\.','\'','\\\'','\t','\\t','\b','\\b','\f','\\f'];
+			arg+=""; for(var i=0;i<a.length;i+=2){arg=arg.split(a[i]).join(a[i+1])};
 			out.push(arg);
 			out.push('"');
 			return out;
